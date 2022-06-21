@@ -1,0 +1,27 @@
+service: dinewithme # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: java11
+
+  stage: dev
+  region: eu-west-1
+
+# you can add packaging information here
+package:
+  artifact: build/libs/dinewithme-0.1-all.jar
+
+functions:
+  api:
+    handler: "io.micronaut.function.aws.proxy.MicronautLambdaHandler"
+    environment:
+      profile: ${self:provider.stage}
+      version: ${env:VERSION}
+      TZ: "Europe/Paris"
+    memorySize: 2048
+    timeout: 60
+    events:
+      - http:
+          path: /api/{proxy+}
+          method: any
+          cors: true

@@ -1,0 +1,34 @@
+version: "3.9"  # optional since v1.27.0
+services:
+#a docker container for be
+  dinewithme-be:
+    image: "dinewithme-be"
+    #exposing ports on our local host
+    ports:
+      - "8080:8080"
+    #links defines dependencies between our containers and define order of starting containers(here db will start first)
+    links:
+      - "dinewithme-db"
+    networks:
+      - dinewithme-network
+  #a docker container for db
+  dinewithme-db:
+    image: "mongo"
+    restart: always
+    networks:
+      - dinewithme-network
+    environment:   #env variables: attributes availble in entire machine
+      MONGO_INITDB_ROOT_USERNAME: "dinewithme-mongodb"
+      MONGO_INITDB_ROOT_PASSWORD: "dinewithme-mongodb"
+      MONGO_INITDB_DATABASE: "dinewithme"
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
+    ports:
+      - "27017-27019:27017-27019"
+#to isolate our container we reated our own network > but connected with our host network
+networks:
+  dinewithme-network:
+    driver: bridge
+
+# docker compose up -d   >>>> to run the docker compose 
