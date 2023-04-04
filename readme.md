@@ -22,7 +22,7 @@ QR code-based transaction system that allows business owners to redeem virtual c
 Secure login and user authentication managed by third-party authentication-providing services.
 
 API-based backend that handles CRUD operations on a database.
-#Usage
+# Usage
 
 Download the Shop with Points mobile application.
 
